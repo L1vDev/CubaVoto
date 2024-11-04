@@ -22,4 +22,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('apps.votation.api.urls'), name='diputados'),
+    path('auth-api', include('rest_framework.urls')),
 ]

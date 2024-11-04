@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.votation',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -122,8 +123,40 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL='votation.Persona'
+
+REST_FRAMEWORK={
+    #"DEFAULT_PERMISSION_CLASSES":[
+    #    "rest_framework.permissions.IsAuthenticated",
+    #]
+    #"DEFAULT_AUTHENTICATION_CLASSES":[
+    #    'rest_framework.authentication.BasicAuthentication',
+    #]
+    "DEFAULT_AUTHENTICATION_CLASSES":[
+        #'rest_framework.authentication.TokenAuthentication',
+        #'apps.votation.api.authentication.CustomTokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+
+    ]
+}
+from datetime import timedelta
+SIMPLE_JWT={
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=240),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'USER_ID_FIELD': 'ci',  # Asegúrate de que esto coincida con el campo de ID de tu modelo CustomUser
+    'USER_ID_CLAIM': 'user_id',
+}
+
+AUTHENTICATION_BACKENDS = [
+    'apps.votation.api.backends.Auth_Backend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
